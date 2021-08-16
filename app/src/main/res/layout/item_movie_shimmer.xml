@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/movie_item_background"
+    android:foreground="@drawable/movie_item_foreground"
+    android:layout_margin="8dp"
+    tools:ignore="UnusedAttribute">
+
+    <View
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:background="#545252"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline" />
+
+    <TextView
+        android:id="@+id/release_date"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="#545252"
+        android:layout_marginEnd="180dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:id="@+id/seasons_count"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="#545252"
+        android:layout_marginEnd="180dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintEnd_toStartOf="@id/created_at"
+        app:layout_constraintTop_toBottomOf="@id/release_date"
+        app:layout_constraintBottom_toTopOf="@id/bottom_guideline" />
+    
+    <TextView
+        android:id="@+id/created_at"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:background="#545252"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/end_guideline"
+        app:layout_constraintBottom_toTopOf="@id/bottom_guideline" />
+    
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="8dp" />
+    
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,22 @@
+<resources>
+	<string name="app_name">TvManager</string>
+	<string name="something_went_wrong">Something went wrong :(</string>
+	<string name="release_date_formatted">Released on %1$s</string>
+	<string name="release_date_empty_formatted">Release date not available</string>
+	<string name="seasons_count_formatted">Seasons: %1$s</string>
+	<string name="seasons_count_empty_formatted">Seasons: Not Available</string>
+	<string name="cd_add_movie">Add Movie</string>
+	<string name="add_movie">Add Movie</string>
+	<string name="cd_display_newer_data">Display newer data</string>
+	<string name="newer_data_available">Newer Data Available</string>
+	<string name="no_internet_connection">No internet connection :(</string>
+	<string name="no_movies_added">You haven\'t added any movies yet</string>
+	<string name="cd_error_image">Error Image</string>
+	<string name="movie_title">Movie Title</string>
+	<string name="release_date">Release Date</string>
+	<string name="seasons">Seasons</string>
+	<string name="movie_added_successfully">Movie added successfully!</string>
+	<string name="cd_release_date">Release Date</string>
+	<string name="click_to_select_release_date">Click To Select Release Date</string>
+	<string name="select">SELECT</string>
+</resources>

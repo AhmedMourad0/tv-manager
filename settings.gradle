@@ -1,0 +1,4 @@
+rootProject.name = "TvManager"
+include ':app'
+include ':core'
+include ':movies'

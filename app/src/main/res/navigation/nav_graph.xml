@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/nav_graph"
+	app:startDestination="@id/findMoviesFragment">
+	<fragment
+		android:id="@+id/findMoviesFragment"
+		android:name="dev.ahmedmourad.tvmanager.movies.find.FindMoviesFragment"
+		android:label="FindMoviesFragment"
+		tools:layout="@layout/fragment_find_movies" >
+		<action
+			android:id="@+id/action_findMoviesFragment_to_addMovieFragment"
+			app:destination="@id/addMovieFragment" />
+	</fragment>
+	<fragment
+		android:id="@+id/addMovieFragment"
+		android:name="dev.ahmedmourad.tvmanager.movies.add.AddMovieFragment"
+		android:label="AddMovieFragment"
+		tools:layout="@layout/fragment_add_movie"/>
+</navigation>

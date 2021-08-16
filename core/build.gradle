@@ -1,0 +1,27 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+    id "kotlin-kapt"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+    api "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    //For access to the PagingData interface, paging-common is a Java-only module
+    api "androidx.paging:paging-common:$paging_version"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0'
+}
