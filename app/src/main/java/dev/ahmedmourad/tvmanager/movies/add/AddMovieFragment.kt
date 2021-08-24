@@ -17,7 +17,7 @@ import dev.ahmedmourad.tvmanager.common.AssistedViewModelFactory
 import dev.ahmedmourad.tvmanager.common.SimpleSavedStateViewModelFactory
 import dev.ahmedmourad.tvmanager.databinding.FragmentAddMovieBinding
 import dev.ahmedmourad.tvmanager.di.injector
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -59,38 +59,36 @@ class AddMovieFragment : Fragment(R.layout.fragment_add_movie) {
     }
 
     private fun initializeStateObservers() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.addMovieState.collectLatest { state ->
-                when (state) {
-                    is AddMoviesViewModel.AddMovieState.Success -> {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.movie_added_successfully,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        findNavController().navigateUp()
-                    }
-                    is AddMoviesViewModel.AddMovieState.NoConnection -> {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.no_internet_connection,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        setAddEnabled(viewModel.canAdd.value)
-                    }
-                    is AddMoviesViewModel.AddMovieState.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.something_went_wrong,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        setAddEnabled(viewModel.canAdd.value)
-                    }
-                    null -> Unit
+        viewModel.addMovieState.onEach { state ->
+            when (state) {
+                is AddMoviesViewModel.AddMovieState.Success -> {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.movie_added_successfully,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    findNavController().navigateUp()
                 }
-                viewModel.addMovieState.value = null
+                is AddMoviesViewModel.AddMovieState.NoConnection -> {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.no_internet_connection,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    setAddEnabled(viewModel.canAdd.value)
+                }
+                is AddMoviesViewModel.AddMovieState.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.something_went_wrong,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    setAddEnabled(viewModel.canAdd.value)
+                }
+                null -> Unit
             }
-        }
+            viewModel.addMovieState.value = null
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun initializeInputFields() {
@@ -106,16 +104,14 @@ class AddMovieFragment : Fragment(R.layout.fragment_add_movie) {
             viewModel.onSeasonsCountChanged(text?.toString()?.toDoubleOrNull())
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.releaseDate.collectLatest {
-                val date = viewModel.releaseDate.value?.format(dateFormat)
-                b.releaseDateLabel.text = if (date != null) {
-                    getString(R.string.release_date_formatted, date)
-                } else {
-                    getString(R.string.click_to_select_release_date)
-                }
+        viewModel.releaseDate.onEach {
+            val date = viewModel.releaseDate.value?.format(dateFormat)
+            b.releaseDateLabel.text = if (date != null) {
+                getString(R.string.release_date_formatted, date)
+            } else {
+                getString(R.string.click_to_select_release_date)
             }
-        }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         b.releaseDateLabel.setOnClickListener {
             startReleaseDatePicker()
@@ -130,11 +126,9 @@ class AddMovieFragment : Fragment(R.layout.fragment_add_movie) {
             viewModel.onAddMovie()
             setAddEnabled(false)
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.canAdd.collectLatest { enable ->
-                setAddEnabled(enable)
-            }
-        }
+        viewModel.canAdd.onEach { enable ->
+            setAddEnabled(enable)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setAddEnabled(enabled: Boolean) {
