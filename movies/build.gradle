@@ -45,7 +45,7 @@ android {
 
 apollo {
     generateKotlinModels.set(true)
-    schemaFile.set(file("/src/main/graphql/dev/ahmedmourad/tvmanager/movies/schema.json"))
+    schemaFile.set(file("\\src\\main\\graphql\\dev\\ahmedmourad\\tvmanager\\movies\\schema.json"))
     customTypeMapping = [
             "Date" : "java.time.LocalDateTime"
     ]
