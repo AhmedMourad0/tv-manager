@@ -23,6 +23,7 @@ import dev.ahmedmourad.tvmanager.common.AssistedViewModelFactory
 import dev.ahmedmourad.tvmanager.common.SimpleSavedStateViewModelFactory
 import dev.ahmedmourad.tvmanager.databinding.FragmentFindMoviesBinding
 import dev.ahmedmourad.tvmanager.di.injector
+import dev.ahmedmourad.tvmanager.utils.bindToLifecycle
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Provider
@@ -105,56 +106,64 @@ class FindMoviesFragment : Fragment(R.layout.fragment_find_movies) {
     }
 
     private fun initializeStateObservers() {
-        viewModel.state.onEach { state ->
-            when (state) {
-                is FindMoviesViewModel.State.Data -> {
-                    itemsMode()
-                    adapter.submitData(state.data)
-                }
-                FindMoviesViewModel.State.NoConnection -> {
-                    if (adapter.itemCount > 0) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.no_internet_connection,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        noConnectionMode()
+        bindToLifecycle {
+            viewModel.state.collectLatest { state ->
+                when (state) {
+                    is FindMoviesViewModel.State.Data -> {
+                        itemsMode()
+                        adapter.submitData(state.data)
+                    }
+                    FindMoviesViewModel.State.NoConnection -> {
+                        if (adapter.itemCount > 0) {
+                            Toast.makeText(
+                                requireContext(),
+                                R.string.no_internet_connection,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            noConnectionMode()
+                        }
+                    }
+                    is FindMoviesViewModel.State.Error -> {
+                        if (adapter.itemCount > 0) {
+                            Toast.makeText(
+                                requireContext(),
+                                R.string.something_went_wrong,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            errorMode()
+                        }
+                    }
+                    FindMoviesViewModel.State.Loading -> {
+                        loadingMode()
+                        adapter.submitData(PagingData.empty())
                     }
                 }
-                is FindMoviesViewModel.State.Error -> {
-                    if (adapter.itemCount > 0) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.something_went_wrong,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        errorMode()
-                    }
-                }
-                FindMoviesViewModel.State.Loading -> {
-                    loadingMode()
-                    adapter.submitData(PagingData.empty())
+            }
+        }
+
+        bindToLifecycle {
+            viewModel.isNewerDataAvailable.collectLatest { isAvailable ->
+                if (isAvailable) {
+                    binding!!.newerDataFab.show()
+                } else {
+                    binding!!.newerDataFab.hide()
                 }
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
-        viewModel.isNewerDataAvailable.onEach { isAvailable ->
-            if (isAvailable) {
-                binding!!.newerDataFab.show()
-            } else {
-                binding!!.newerDataFab.hide()
+        bindToLifecycle {
+            viewModel.endRefresh.collectLatest {
+                binding!!.swipeToRefresh.isRefreshing = false
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
-        viewModel.endRefresh.onEach {
-            binding!!.swipeToRefresh.isRefreshing = false
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.clearList.onEach {
-            adapter.submitData(PagingData.empty())
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        bindToLifecycle {
+            viewModel.clearList.collectLatest {
+                adapter.submitData(PagingData.empty())
+            }
+        }
     }
 
     private fun itemsMode() {
